@@ -229,7 +229,6 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
 .arch:not([style*=url]):after{content:"ẢNH CƯỚI";position:absolute;bottom:14%;font:500 8px var(--sans);letter-spacing:.22em}
 .lotus-wrap .lsvg{width:150px}
 @media(max-height:720px){.lotus-wrap{display:none}.crest{width:62px;height:62px}.af{width:min(100%,100px)}}
-/* 📍 [KÍCH THƯỚC] LƯỚI ẢNH PHÒNG LAB: grid-template-columns/rows = số cột/hàng. gap = khoảng cách giữa các ảnh (đơn vị px). Bố cục từng ảnh sửa ở mảng LAY (phần <script>). */
 .gr.mos{grid-template-columns:repeat(4,1fr);grid-auto-rows:92px;gap:9px}.sp{aspect-ratio:auto}
 .ph{inset:4px;border-radius:2px;overflow:hidden}.ph em{font-size:15px;opacity:.7}
 .ph:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);transform:translateX(-120%)}
@@ -532,6 +531,55 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
 @keyframes sndw{50%{opacity:.3}}@keyframes sndp{50%{box-shadow:0 0 18px 2px rgba(224,187,117,.65)}}
 .sndhint{position:absolute;top:54px;right:14px;z-index:5;font:500 10.5px var(--sans);color:var(--gold);background:rgba(40,6,12,.72);border:1px solid rgba(224,187,117,.4);padding:3px 10px;border-radius:12px;pointer-events:none;transition:opacity .6s}
 .sndhint.hide{opacity:0}
+
+/* ===================== 📍 PHÒNG LAB: LUỒNG CUỘN DỌC (thay cho lưới ảnh cũ) =====================
+   📍 [KÍCH THƯỚC] Điện thoại: 1 cột, rộng tối đa 520px (đổi max-width trong .gl-list). Máy tính: so le trái-phải (zíc-zắc), mỗi ảnh 45% chiều rộng.
+   Tỉ lệ từng khung: sửa số --r trong HTML của từng ảnh (4/5 dọc, 1/1 vuông, 3/2 ngang). Ảnh luôn lấp đầy khung (object-fit: cover), không méo. */
+.gscroll{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(224,187,117,.5) transparent;justify-content:flex-start;align-items:stretch;padding:58px 24px 70px 14px}
+.gscroll>*{flex-shrink:0}
+.gl-head{text-align:center;margin-bottom:20px}
+.gl-cue{margin-top:8px;font:500 11px var(--sans);letter-spacing:.18em;color:var(--gold);animation:glcue 2s ease-in-out infinite}@keyframes glcue{50%{transform:translateY(5px);opacity:.5}}
+.gl-end{text-align:center;margin:34px 0 8px;font:500 11px var(--sans);letter-spacing:.14em;color:rgba(248,242,228,.6)}
+.gl-list{display:flex;flex-direction:column;gap:28px;width:100%;max-width:520px;margin:0 auto}
+.gi{margin:0;opacity:0;transform:translate(var(--dx,0),44px)}
+.gi.in{opacity:1;transform:none;transition:opacity 1s ease var(--sd,0s),transform 1s cubic-bezier(.2,.8,.2,1) var(--sd,0s)}
+.gf{position:relative;aspect-ratio:var(--r,4/5);cursor:zoom-in;border:1px solid #e0bb75;border-radius:3px;background:linear-gradient(135deg,#caa86a,#7a1a2a);box-shadow:0 0 0 3px rgba(40,6,12,.92),0 0 0 4px rgba(224,187,117,.55),0 18px 36px rgba(0,0,0,.55)}
+.gf:before{content:attr(data-n);position:absolute;inset:0;display:grid;place-items:center;font:600 34px var(--serif);color:rgba(255,255,255,.75)}
+.gf img{position:absolute;inset:4px;z-index:1;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:cover;display:block;border-radius:2px}
+/* lớp "mẫu vật niêm phong" tan ra từ tâm khi ảnh hiện, kèm viền bừng sáng (chạy một lần) */
+.gf:after{content:"";position:absolute;inset:4px;z-index:2;border-radius:2px;pointer-events:none;background:repeating-linear-gradient(45deg,rgba(224,187,117,.1) 0 5px,transparent 5px 10px),radial-gradient(circle at 50% 40%,rgba(96,22,40,.94),rgba(20,4,10,.97));-webkit-mask-image:radial-gradient(circle at 50% 50%,transparent var(--rxr),#000 calc(var(--rxr) + 7%));mask-image:radial-gradient(circle at 50% 50%,transparent var(--rxr),#000 calc(var(--rxr) + 7%))}
+.gi.in .gf:after{animation:rxMask 1.3s cubic-bezier(.3,.7,.2,1) both calc(var(--sd,0s) + .25s)}
+.gi.in .gf{animation:gfl 1.5s ease-out both calc(var(--sd,0s) + .3s)}
+@keyframes gfl{40%{box-shadow:0 0 0 3px rgba(40,6,12,.92),0 0 0 4px #fff3cf,0 0 30px rgba(255,214,140,.9),0 18px 36px rgba(0,0,0,.55)}}
+.gi figcaption{margin-top:12px;text-align:center;font:600 10px var(--serif);letter-spacing:.24em;color:#f6dc9a}
+@media(prefers-reduced-motion:reduce){.gi{opacity:1;transform:none}.gf:after{display:none}}
+
+/* ===================== 📍 [KÍCH THƯỚC] RESPONSIVE: MÀN HÌNH THẤP / MÁY TÍNH / MÀN NGANG =====================
+   Điện thoại dọc: giữ nguyên thiết kế gốc. Mốc 900px trở lên = máy tính: khung rộng hơn, chữ to hơn, các khối căn giữa.
+   Muốn đổi mốc máy tính: đổi số 900px. Muốn chữ to/nhỏ hơn trên máy tính: sửa các font-size trong khối @media (min-width:900px). */
+@media (max-height:700px){.scene:not(.story):not(.gscroll){overflow-y:auto;overflow-x:hidden;justify-content:center;justify-content:safe center;scrollbar-width:none}.scene::-webkit-scrollbar{display:none}}
+@media (min-width:600px) and (max-width:899px){.gl-list{max-width:600px}}
+@media (min-width:900px){
+ #app{max-width:min(1180px,96vw);max-height:none;height:min(900px,94vh)}
+ .scene>.card{max-width:540px}.tl{max-width:600px}
+ .eyebrow{font-size:23px}.card p,.card li{font-size:15px}.card h2{font-size:31px}.cols{font-size:14px}.guest{font-size:38px}
+ .row b{font-size:22px}.row span{font-size:14px}.acc{font-size:14px}input[type=text],textarea,.opt{font-size:14.5px}label.t{font-size:14px}
+ .cov .names{font-size:21px}.cov .role{font-size:11px}.crest{width:92px;height:92px}.ttl{font-size:13px}.af{width:min(100%,150px)}.amp2{font-size:38px}
+ .node h3{font-size:18px}.node p{font-size:13px}.node b,.node em{font-size:12px}
+ .cap b{font-size:30px}.cap small{font-size:12px}.cap em{font-size:14px}.hint{font-size:13px}
+ .veh{left:12%;width:300px;height:221px}.v.c{width:270px}.lm .ig{width:auto;height:100%;max-width:72%}
+ .pol{width:190px}.pairB{width:300px;height:285px}.pp{width:290px;left:38%}.lh{width:130px;height:325px}.bm{width:760px}
+ /* Phòng Lab trên máy tính: zíc-zắc trái - phải */
+ .gscroll{padding:76px 56px 96px}.gl-list{max-width:1020px;gap:36px}
+ .gi{width:45%;--dx:-70px}.gi:nth-child(odd){align-self:flex-start}.gi:nth-child(even){align-self:flex-end;--dx:70px;margin-top:-14vh}
+}
+/* Điện thoại xoay ngang / cửa sổ rất thấp: thu nhỏ để vừa màn hình */
+@media (max-height:520px) and (orientation:landscape){
+ #app{max-width:min(980px,100vw);height:100vh;max-height:none;border-radius:0;box-shadow:none}
+ .scene{padding:44px 22px 36px}.scene>.card{max-width:520px}.lotus-wrap{display:none}
+ .card p,.card li{font-size:12px}.card h2{font-size:22px}.crest{width:52px;height:52px}.af{width:min(100%,84px)}
+ .cap b{font-size:16px}.cap em{font-size:11px}.veh{width:130px;height:96px}.v.c{width:120px}.pairB{width:150px;height:143px}.pol{width:100px}.pp{width:150px}.lh{width:60px;height:150px}
+}
 </style>
 </head>
 <body>
@@ -547,6 +595,7 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
    📍 [KÍCH THƯỚC] -> chỉnh width / height / object-fit để ảnh không bị méo
    📍 [HIỆU ỨNG]   -> tốc độ, thời gian các hiệu ứng
    📍 [NHẠC]       -> file nhạc nền mp3 + nút loa
+   Phòng Lab (15 ảnh) nằm trong HTML: tìm ĐIỀN LINK ẢNH SỐ (mỗi ảnh một dòng ghi chú)
  CẤU TRÚC THƯ MỤC KHI ĐƯA LÊN HOST (đổi tên file này thành index.html):
    thiep-cuoi/
    ├─ index.html
@@ -612,8 +661,43 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
 <section class="scene story" id="sA" data-st="A"></section>
 <section class="scene story" id="sB" data-st="B"></section>
 <section class="scene story" id="sC" data-st="C"></section>
-<section class="scene gal" data-g="0"></section>
-<section class="scene gal" data-g="1"></section>
+<!-- 📍 [TÊN] PHÒNG LAB (cuộn dọc): sửa tiêu đề "Phòng Lab · Bộ sưu tập" và dòng "Specimen 01 — 15" ngay bên dưới. 15 ảnh nằm trong các thẻ <figure> phía dưới, theo đúng thứ tự cuộn. -->
+<section class="scene gal gscroll" id="sGal" data-g="0">
+<div class="gl-head"><div class="eyebrow" style="font-size:18px;line-height:1.35">Phòng Lab · Bộ sưu tập<br><span style="font-size:12px;letter-spacing:.14em">Specimen 01 — 15</span></div><div class="gl-cue">Cuộn xuống để xem ảnh ⌄</div></div>
+<div class="gl-list">
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 01 VÀO ĐÂY: sửa đường dẫn trong src="..." (ví dụ ./images/anh-01.jpg). Tỉ lệ khung: sửa số sau chữ "r:" trong style="..." của thẻ ngay dưới (4/5 = ảnh dọc, 1/1 = vuông, 3/2 = ảnh ngang). -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="01"><img src="./images/anh-01.jpg" alt="Ảnh cưới 01" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 01</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 02 VÀO ĐÂY (src="./images/anh-02.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="02"><img src="./images/anh-02.jpg" alt="Ảnh cưới 02" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 02</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 03 VÀO ĐÂY (src="./images/anh-03.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="03"><img src="./images/anh-03.jpg" alt="Ảnh cưới 03" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 03</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 04 VÀO ĐÂY (src="./images/anh-04.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="04"><img src="./images/anh-04.jpg" alt="Ảnh cưới 04" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 04</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 05 VÀO ĐÂY (src="./images/anh-05.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="05"><img src="./images/anh-05.jpg" alt="Ảnh cưới 05" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 05</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 06 VÀO ĐÂY (src="./images/anh-06.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="06"><img src="./images/anh-06.jpg" alt="Ảnh cưới 06" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 06</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 07 VÀO ĐÂY (src="./images/anh-07.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="07"><img src="./images/anh-07.jpg" alt="Ảnh cưới 07" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 07</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 08 VÀO ĐÂY (src="./images/anh-08.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="08"><img src="./images/anh-08.jpg" alt="Ảnh cưới 08" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 08</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 09 VÀO ĐÂY (src="./images/anh-09.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="09"><img src="./images/anh-09.jpg" alt="Ảnh cưới 09" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 09</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 10 VÀO ĐÂY (src="./images/anh-10.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="10"><img src="./images/anh-10.jpg" alt="Ảnh cưới 10" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 10</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 11 VÀO ĐÂY (src="./images/anh-11.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="11"><img src="./images/anh-11.jpg" alt="Ảnh cưới 11" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 11</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 12 VÀO ĐÂY (src="./images/anh-12.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="12"><img src="./images/anh-12.jpg" alt="Ảnh cưới 12" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 12</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 13 VÀO ĐÂY (src="./images/anh-13.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="13"><img src="./images/anh-13.jpg" alt="Ảnh cưới 13" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 13</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 14 VÀO ĐÂY (src="./images/anh-14.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="14"><img src="./images/anh-14.jpg" alt="Ảnh cưới 14" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 14</figcaption></figure>
+  <!-- 📍 [ẢNH] ĐIỀN LINK ẢNH SỐ 15 VÀO ĐÂY (src="./images/anh-15.jpg") -->
+  <figure class="gi"><div class="gf" style="--r:4/5" data-n="15"><img src="./images/anh-15.jpg" alt="Ảnh cưới 15" loading="lazy" decoding="async" onerror="this.style.display='none'"></div><figcaption>MẪU 15</figcaption></figure>
+</div>
+<div class="gl-end">Cuộn tiếp để sang phần tiếp theo ⌄</div>
+</section>
 <!-- 3 Invitation -->
 <section class="scene" data-i="2">
   <div class="eyebrow">Trạm 3 · Lời mời chính thức</div>
@@ -713,15 +797,25 @@ if(CFG.photoA||CFG.photoB){$$('.pola div').forEach((d,i)=>{const s=i?CFG.photoB:
 scenes.forEach((_,i)=>{const b=document.createElement('button');b.className='dot';b.setAttribute('aria-label','Trang '+(i+1));b.onclick=()=>go(i);dotsEl.appendChild(b)});
 function go(i){if(i<0||i>=scenes.length||i===cur||lock)return;lock=true;const fw=i>cur;cur=i;
  scenes.forEach((s,k)=>{s.classList.toggle('active',k===i);s.classList.toggle('past',k<i)});
- $$('.dot').forEach((d,k)=>d.classList.toggle('on',k===i));$('#up').style.visibility=i?'visible':'hidden';after(fw);story();
+ $$('.dot').forEach((d,k)=>d.classList.toggle('on',k===i));$('#up').style.visibility=i?'visible':'hidden';after(fw);story();galStart();
  setTimeout(()=>lock=false,900)}
 $('#up').onclick=()=>go(cur-1);
 // wheel / touch / keys
-let wt=0;addEventListener('wheel',e=>{if(e.target.closest('textarea,#lb'))return;const n=Date.now();if(n-wt<900||Math.abs(e.deltaY)<20)return;wt=n;go(cur+(e.deltaY>0?1:-1))},{passive:true});
-let y0=null;const app=$('#app');
-app.addEventListener('touchstart',e=>{y0=e.touches[0].clientY},{passive:true});
-app.addEventListener('touchend',e=>{if(y0===null)return;const d=y0-e.changedTouches[0].clientY;y0=null;if(Math.abs(d)>55&&!e.target.closest('input,textarea,#lb'))go(cur+(d>0?1:-1))});
-addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;if(['ArrowDown','PageDown',' '].includes(e.key))go(cur+1);if(['ArrowUp','PageUp'].includes(e.key))go(cur-1)});
+let wt=0;/* 📍 [HIỆU ỨNG] Điều hướng slide: nếu trang đang có nội dung cuộn được (Phòng Lab, hoặc màn hình thấp) thì cuộn trong trang trước;
+   chỉ khi chạm mép trên/dưới rồi cuộn/vuốt tiếp thì mới chuyển slide. */
+const SCR=t=>{const s=t.closest&&t.closest('.scene');return s&&getComputedStyle(s).overflowY==='auto'&&s.scrollHeight>s.clientHeight+2?s:null};
+const edge=s=>[s.scrollTop<=1,s.scrollTop+s.clientHeight>=s.scrollHeight-2];
+addEventListener('wheel',e=>{if(e.target.closest('textarea,#lb'))return;const sc=SCR(e.target);
+ if(sc){const up=e.deltaY<0,[t,b]=edge(sc);if(!((up&&t)||(!up&&b))){sc._e=0;return}if(!sc._e){sc._e=Date.now();return}if(Date.now()-sc._e<450)return;sc._e=0}
+ const n=Date.now();if(n-wt<900||Math.abs(e.deltaY)<20)return;wt=n;go(cur+(e.deltaY>0?1:-1))},{passive:true});
+let y0=null,sc0=null,t0=false,b0=false;const app=$('#app');
+app.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;sc0=SCR(e.target);if(sc0)[t0,b0]=edge(sc0)},{passive:true});
+app.addEventListener('touchend',e=>{if(y0===null)return;const d=y0-e.changedTouches[0].clientY;y0=null;if(Math.abs(d)<=55||e.target.closest('input,textarea,#lb'))return;
+ if(sc0){const[t,b]=edge(sc0);if(!((d>0&&b0&&b)||(d<0&&t0&&t)))return}go(cur+(d>0?1:-1))});
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)||lb.classList.contains('on'))return;
+ const dn=['ArrowDown','PageDown',' '].includes(e.key),up=['ArrowUp','PageUp'].includes(e.key);if(!dn&&!up)return;
+ const sc=SCR(scenes[cur]);if(sc){const[t,b]=edge(sc);if((dn&&!b)||(up&&!t)){sc.scrollBy({top:(dn?1:-1)*sc.clientHeight*.7,behavior:'smooth'});e.preventDefault();return}}
+ go(cur+(dn?1:-1))});
 // 3D tilt (pointer + gyro)
 $$('.tilt').forEach(c=>{const sc=c.closest('.scene');
  sc.addEventListener('pointermove',e=>{const r=sc.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*14+'deg');c.style.setProperty('--rx',(-((e.clientY-r.top)/r.height-.5))*10+'deg')});
@@ -840,64 +934,23 @@ const cd=[...Array(9)].map((_,i)=>({x:i,h:20+Math.random()*50,up:Math.random()>.
   cx.globalAlpha=Math.max(0,p.l)*.85;cx.fillStyle='#ffe3a3';cx.shadowColor='#e0bb75';cx.shadowBlur=8;cx.beginPath();cx.arc(p.x,p.y,p.s,0,7);cx.fill();return true});
  requestAnimationFrame(loop)})(0);
 // gallery + medallion icons
-/* ===================== 📍 [ẢNH] THƯ VIỆN 15 ẢNH (PHÒNG LAB) =====================
-   Danh sách 15 đường dẫn bên dưới tương ứng 15 ảnh, ĐÚNG THỨ TỰ 1 -> 15. Cách làm:
-     1) Đặt 15 file ảnh vào thư mục images cạnh file thiệp, đặt tên anh-01.jpg, anh-02.jpg ... anh-15.jpg
-     2) Không cần sửa gì thêm. Nếu muốn dùng tên khác, sửa lại đường dẫn tương ứng (giữ dấu nháy đơn và dấu phẩy).
-     3) Có thể dùng link đầy đủ https://... cho từng ảnh.
-   - Ảnh 1-8 = Bộ sưu tập I | Ảnh 9-15 = Bộ sưu tập II. Ảnh 1 và 9 là khung LỚN NHẤT: chọn ảnh đẹp nhất.
-   - [KÍCH THƯỚC] Mỗi ảnh nên rộng ~1000px, dưới 150KB (JPG/WebP). Trong lưới ảnh tự cắt vừa khung (background-size: cover);
-     ở khung xem lớn ảnh hiện trọn vẹn không méo (object-fit: contain).
-   - Ảnh nào thiếu file thì ô đó hiện khung mẫu màu vàng đỏ, không làm vỡ trang. */
-const PHOTOS=[ // 📍 [ẢNH] 15 đường dẫn ảnh, sửa tên file tại đây nếu cần
-  './images/anh-01.jpg',
-  './images/anh-02.jpg',
-  './images/anh-03.jpg',
-  './images/anh-04.jpg',
-  './images/anh-05.jpg',
-  './images/anh-06.jpg',
-  './images/anh-07.jpg',
-  './images/anh-08.jpg',
-  './images/anh-09.jpg',
-  './images/anh-10.jpg',
-  './images/anh-11.jpg',
-  './images/anh-12.jpg',
-  './images/anh-13.jpg',
-  './images/anh-14.jpg',
-  './images/anh-15.jpg'
-];
-/* 📍 [TÊN] Tiêu đề 2 trang thư viện: t = tiêu đề, s = dòng phụ, b = chữ trên nút bấm. Sửa chữ nằm giữa 2 dấu nháy đơn. */
-const GAL=[{t:'Phòng Lab · Bộ sưu tập I',s:'Specimen 01 — 08',n:8,k:'dish',b:'KÍCH HOẠT PHẢN ỨNG'},{t:'Phòng Lab · Bộ sưu tập II',s:'Specimen 09 — 15',n:7,k:'slide',b:'KHỚP LỆNH TOÀN BỘ'}];
 const RG='<svg class="rg" viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="#e0bb75" stroke-width=".8" stroke-dasharray="1.500 3.200"/></svg>';
 const ICO=(n,c)=>'<span class="med '+(c||'')+'">'+RG+'<svg class="gl" viewBox="0 0 24 24"><use href="#i-'+n+'"/></svg></span>';
-/* 📍 [KÍCH THƯỚC] BỐ CỤC LƯỚI ẢNH: mỗi cặp ['cột bắt đầu/cột kết thúc','hàng bắt đầu/hàng kết thúc'] là vị trí 1 ảnh trên lưới 4 cột x 4 hàng.
-   Ví dụ ['1/4','1/3'] = chiếm từ cột 1 tới hết cột 3, từ hàng 1 tới hết hàng 2 (ảnh lớn). Muốn ảnh to hơn thì tăng số kết thúc. Không để 2 ảnh chồng lên nhau. */
-const LAY=[[['1/4','1/3'],['4/5','1/3'],['1/3','3/4'],['3/5','3/4'],['1/2','4/5'],['2/3','4/5'],['3/4','4/5'],['4/5','4/5']],[['1/3','1/3'],['3/5','1/2'],['3/4','2/3'],['4/5','2/3'],['1/3','3/5'],['3/5','3/4'],['3/5','4/5']]];let off=0;
-/* 📍 [HIỆU ỨNG] Bong bóng sủi bọt + dải "chất lỏng" quét lên khi bấm nút KÍCH HOẠT PHẢN ỨNG.
-   Muốn nhiều/ít bong bóng: đổi số 22 bên dưới. Phần màu sắc/tốc độ chỉnh trong CSS, tìm từ khóa "PHẢN ỨNG HÓA HỌC". */
-const RX='<div class="rx"><i class="liq"></i><div class="fizz">'+Array.from({length:22},(_,i)=>'<i style="left:'+((i*37)%92+4)+'%;--s:'+(5+(i*7)%9)+'px;--t:'+(1.6+(i*13)%10/10)+'s;--dl:'+(.15+(i*11)%14/10)+'s;--sw:'+((i%2?1:-1)*(8+i%5*4))+'px"></i>').join('')+'</div></div>';
-$$('.gal').forEach((sec,gi)=>{const g=GAL[gi];let it='';
- for(let k=0;k<g.n;k++){const i=off+k,s=PHOTOS[i],nn=String(i+1).padStart(2,'0');
-  it+='<button class="sp" style="--d:'+(k*.18)+'s;grid-column:'+LAY[gi][k][0]+';grid-row:'+LAY[gi][k][1]+'" data-i="'+i+'" aria-label="Mẫu '+nn+'"><span class="ph"'+(s?' style="background-image:url('+s+'),linear-gradient(135deg,#caa86a,#7a1a2a)"':'')+'><em>'+nn+'</em></span><span class="gl2"></span><b>MẪU '+nn+'</b><u>▲ +'+(3+Math.random()*14).toFixed(1)+'%</u></button>'}
- off+=g.n;const tk='XAUUSD ▲ 2,431.5 &nbsp;·&nbsp; AN/TRANG ▲ +∞ &nbsp;·&nbsp; LOVE ▲ MAX &nbsp;·&nbsp; ESTROGEN ✦ STABLE &nbsp;·&nbsp; TAKE PROFIT ▲ FOREVER &nbsp;·&nbsp; ';
- sec.innerHTML='<div class="eyebrow" style="font-size:18px;line-height:1.35">'+g.t+'<br><span style="font-size:12px;letter-spacing:.14em">'+g.s+'</span></div><div class="lab"><svg class="lchart" viewBox="0 0 300 160" preserveAspectRatio="none"><path d="M0 140C40 120 50 130 90 90S150 100 190 60 260 40 300 8"/></svg><i class="scan"></i>'+RX+'<div class="gr mos">'+it+'</div></div><button class="act"><i class="ring2"></i><i class="ring2 r2"></i><span class="al">'+ICO('target','sm')+g.b+'</span><small>Chạm để mở các mẫu ảnh</small></button><div class="meter"><i></i><span>ĐỘ KHỚP LỆNH 0%</span></div>'});
-/* 📍 [HIỆU ỨNG] Trình tự khi bấm nút: (1) nút đổ đầy màu vàng -> (2) dải chất lỏng quét từ dưới lên
-   -> (3) từng ảnh "kết tinh" lộ ra đúng lúc dải quét đi qua -> (4) chuyển sang trạng thái ĐÃ KHỚP LỆNH.
-   Tổng thời gian hiệu ứng ~3,5 giây: sửa số 3500 (mili giây) ở cuối đoạn này nếu muốn nhanh/chậm hơn. */
-$$('.act').forEach(b=>b.onclick=()=>{const sec=b.closest('.gal');if(sec.classList.contains('open')||sec.classList.contains('reacting'))return;
- const lab=sec.querySelector('.lab'),L=lab.getBoundingClientRect(),sp=[...sec.querySelectorAll('.sp')],m=sec.querySelector('.meter span'),bar=sec.querySelector('.meter i');
- lab.style.setProperty('--lh',L.height+'px');
- sp.forEach(s=>{const r=s.getBoundingClientRect(),y=(r.top+r.height/2-L.top)/L.height;s.style.setProperty('--rd',(0.45+(1-y)*1.5).toFixed(2)+'s')});
- sec.classList.add('reacting');b.querySelector('.al').innerHTML=ICO('spark','sm')+'ĐANG PHẢN ỨNG…';b.querySelector('small').textContent='Đang mở các mẫu ảnh…';
- const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/2600);bar.style.width=(p*100)+'%';m.textContent='ĐỘ KHỚP LỆNH '+Math.round(p*100)+'%';if(p<1)requestAnimationFrame(f)})(t0);
- setTimeout(()=>{sec.classList.remove('reacting');sec.classList.add('open');b.querySelector('.al').innerHTML=ICO('spark','sm')+'ĐÃ KHỚP LỆNH';b.querySelector('small').textContent='Chạm vào từng mẫu để phóng to'},3500);burst(60)});
+/* ===================== 📍 [HIỆU ỨNG] PHÒNG LAB: ẢNH HIỆN DẦN KHI CUỘN (Intersection Observer) =====================
+   Ảnh nào cuộn tới mới "bừng sáng" (mờ -> rõ, trượt nhẹ lên). Ảnh chưa tới thì ẩn, và nhờ loading="lazy" trình duyệt chỉ tải ảnh khi gần tới.
+   Muốn ảnh hiện sớm/muộn hơn: sửa rootMargin (-10% = hiện khi ảnh lên cao hơn đáy 10%) hoặc threshold (.12 = hiện khi thấy 12% ảnh). */
+let galIO=null;
+function galStart(){const s=scenes[cur];if(!s||!s.classList.contains('gscroll')||galIO)return;
+ const all=[...s.querySelectorAll('.gi')];
+ if(!('IntersectionObserver' in window)){all.forEach(f=>f.classList.add('in'));return}   // trình duyệt quá cũ: hiện hết
+ galIO=new IntersectionObserver(es=>{es.filter(e=>e.isIntersecting).forEach((e,k)=>{e.target.style.setProperty('--sd',(k*.15)+'s');e.target.classList.add('in');galIO.unobserve(e.target)})},{root:s,rootMargin:'0px 0px -10% 0px',threshold:.12});
+ all.forEach(f=>galIO.observe(f))}
+/* 📍 [ẢNH] Khung xem lớn (lightbox): chạm vào ảnh đã hiện để phóng to. Ảnh luôn hiện TRỌN VẸN (object-fit: contain), không bị cắt/méo trên điện thoại. */
 const lb=$('#lb'),lbi=$('.lbi'),lbn=$('.lbn');let li=0;
-/* 📍 [ẢNH] Khung xem lớn (lightbox): ảnh luôn hiện TRỌN VẸN (object-fit: contain), không bị cắt/méo trên điện thoại.
-   Chỉ khi chưa có ảnh thật mới hiện khung mẫu tỉ lệ 3:4. */
-function show(i){li=(i+15)%15;const p=PHOTOS[li];lbi.classList.remove('zoom');lbi.style.backgroundImage='';
+function show(i){const S=[...$$('.gi img')].map(x=>x.getAttribute('src')),n=S.length;li=(i+n)%n;const p=S[li];lbi.classList.remove('zoom');lbi.style.backgroundImage='';
  if(p){lbi.classList.remove('nophoto');lbi.innerHTML='<img alt="Ảnh cưới '+(li+1)+'" src="'+p+'" onerror="this.parentNode.classList.add(\'nophoto\');this.parentNode.textContent=\''+String(li+1).padStart(2,'0')+'\'">'}else{lbi.classList.add('nophoto');lbi.textContent=String(li+1).padStart(2,'0')}
- lbn.textContent=String(li+1).padStart(2,'0')+' / 15';lb.classList.remove('on');void lb.offsetWidth;lb.classList.add('on')}
-$$('.sp').forEach(s=>s.onclick=()=>{if(s.closest('.open'))show(+s.dataset.i)});
+ lbn.textContent=String(li+1).padStart(2,'0')+' / '+n;lb.classList.remove('on');void lb.offsetWidth;lb.classList.add('on')}
+$$('.gi').forEach((f,i)=>f.onclick=()=>{if(f.classList.contains('in'))show(i)});
 lb.onclick=()=>lb.classList.remove('on');
 lbi.onclick=e=>{e.stopPropagation();const r=lbi.getBoundingClientRect();lbi.style.transformOrigin=((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%';lbi.classList.toggle('zoom')};
 $$('.lba').forEach(b=>b.onclick=e=>{e.stopPropagation();show(li+ +b.dataset.d)});
@@ -1012,18 +1065,25 @@ function story(){tm.forEach(clearTimeout);tm=[];fwOn=0;clearInterval(fwT);const 
  if(k=='B')cap(s,'Đà Nẵng ➔ Sapa ➔ Fansipan ➔ ...');
  if(k=='C'){cap(s,'Hạ Long · Dưới chân ngọn hải đăng');T(fwStart,400)}}
 $('#sA').dataset.stage=1;
-/* ===================== 📍 [NHẠC] LOGIC NHẠC NỀN =====================
-   - Nhạc tự phát khi khách chạm/click lần đầu vào thiệp (trình duyệt không cho phát nhạc khi chưa có thao tác).
-   - Bấm nút loa góc trên bên phải để tắt/bật. Tắt tay rồi thì nhạc sẽ không tự bật lại.
-   - Đổi âm lượng: sửa số 0.6 (0 = im lặng, 1 = to nhất). Nhạc tự dừng khi khách chuyển sang tab khác. */
-const BGM=$('#bgm'),SND=$('#snd'),HINT=$('#sndhint');let started=false,userMuted=false;BGM.volume=0.6;
+/* ===================== 📍 [NHẠC] LOGIC NHẠC NỀN (TỰ PHÁT THÔNG MINH) =====================
+   Cách hoạt động (ba lớp, tự động):
+   (1) Vừa mở thiệp: nhạc được phát NGAY ở chế độ im lặng (trình duyệt cho phép) nên đã "chạy ngầm" sẵn.
+   (2) Khách có thao tác ĐẦU TIÊN (chạm, click, bấm phím; cuộn/vuốt cũng được thử) -> nhạc lập tức MỞ TIẾNG, không cần bấm nút loa.
+       Lưu ý: trình duyệt chỉ cho mở tiếng sau chạm/click/phím. Riêng cuộn chuột hoặc vuốt đơn thuần đôi khi bị chặn,
+       khi đó nhạc sẽ bật ở lần chạm kế tiếp (thiệp tự thử lại ở mọi thao tác cho tới khi thành công).
+   (3) Nút loa góc trên bên phải vẫn dùng để tắt/bật. Khách tắt tay rồi thì nhạc không tự bật lại.
+   Đổi âm lượng: sửa số 0.6 (0 = im lặng, 1 = to nhất). Nhạc tự dừng khi khách chuyển sang tab khác. */
+const BGM=$('#bgm'),SND=$('#snd'),HINT=$('#sndhint');let audible=false,userMuted=false,trying=false;BGM.volume=0.6;
 const setSnd=on=>{SND.classList.toggle('on',on);SND.setAttribute('aria-pressed',on)};
 BGM.addEventListener('error',()=>{SND.classList.add('err');HINT.classList.add('hide')});
-const startBgm=()=>BGM.play().then(()=>{started=true;setSnd(true);HINT.classList.add('hide')}).catch(()=>{});
-const firstTouch=e=>{if(started||userMuted||SND.contains(e.target))return;startBgm()};
-['click','touchend','keydown'].forEach(t=>addEventListener(t,firstTouch,{capture:true,passive:true}));
-SND.onclick=e=>{e.stopPropagation();if(SND.classList.contains('err'))return;if(BGM.paused){userMuted=false;startBgm()}else{userMuted=true;BGM.pause();setSnd(false)}};
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(!BGM.paused)BGM.pause()}else if(started&&!userMuted)BGM.play().catch(()=>{})});
+BGM.muted=true;BGM.play().catch(()=>{});                                   // (1) chạy ngầm, im lặng
+const EV=['pointerup','click','touchend','keydown','wheel','touchmove','scroll'];
+const unlock=e=>{if(audible||userMuted||trying||(e&&e.target&&SND.contains(e.target)))return;trying=true;BGM.muted=false;  // (2) mở tiếng ở thao tác đầu tiên
+ Promise.resolve(BGM.play()).then(()=>{if(!BGM.paused&&!BGM.muted){audible=true;setSnd(true);HINT.classList.add('hide');EV.forEach(t=>removeEventListener(t,unlock,true))}}).catch(()=>{BGM.muted=true;BGM.play().catch(()=>{})}).finally(()=>{trying=false})};
+EV.forEach(t=>addEventListener(t,unlock,{capture:true,passive:true}));
+SND.onclick=e=>{e.stopPropagation();if(SND.classList.contains('err'))return;                // (3) nút loa
+ if(audible){userMuted=true;audible=false;BGM.pause();setSnd(false)}else{userMuted=false;BGM.muted=false;BGM.play().then(()=>{audible=true;setSnd(true);HINT.classList.add('hide')}).catch(()=>{})}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){BGM.pause()}else if(audible&&!userMuted)BGM.play().catch(()=>{})});
 setTimeout(()=>HINT.classList.add('hide'),9000);
 // start
 scenes[0].classList.add('active');$$('.dot')[0].classList.add('on');$('#up').style.visibility='hidden';
