@@ -1150,6 +1150,41 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
 .jr-zoom{position:absolute;z-index:6;right:10px;top:10px;display:none;padding:6px 11px;border-radius:999px;border:1px solid rgba(255,230,170,.8);background:rgba(36,6,14,.72);color:#ffe9b8;font:600 11.5px var(--sans);letter-spacing:.04em;cursor:pointer}
 .jr-photo.cropped .jr-zoom{display:block}
 #lb[data-m=jr] .lba{display:none}
+
+/* ===================================================================================
+   📍 [HIỆU ỨNG] CUỘN DỌC LIÊN TỤC (tìm: CUỘN DỌC LIÊN TỤC)
+   Mọi phần (.scene) xếp chồng theo chiều dọc trong #stage (vùng cuộn tự nhiên). Không còn chuyển slide, khóa cuộn hay hiệu ứng lật 3D giữa các trang.
+   - Hành trình: cao ~3,8 màn hình; khung .stick đứng yên, cuộn tới đâu điểm đến sáng tới đó.
+   - Sợi chỉ đỏ định mệnh (#thread) chạy dọc từ Hành trình -> Cầu hôn -> Phòng Lab; phần đã cuộn qua sáng lên, có trái tim chạy theo.
+   - Cuối phần Cầu hôn / đầu phần Phòng Lab có dải chuyển màu để nền hòa quyện, không bị cắt cứng.
+   =================================================================================== */
+#stage{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;perspective:none;scrollbar-width:none}
+#stage::-webkit-scrollbar{display:none}
+#app:not(.opened) #stage{overflow:hidden}
+.scene,.scene.active,.scene.past,.scene:not(.active){position:relative!important;inset:auto!important;opacity:1!important;pointer-events:auto!important;transform:none!important;filter:none!important;visibility:visible!important;transition:none!important;transform-style:flat!important;overflow:visible!important;min-height:0;flex-shrink:0}
+.scene[data-i="0"]{min-height:100vh;min-height:100dvh}
+.scene:not(.story):not(.gscroll):not([data-i="0"]){min-height:78vh;min-height:78dvh;padding-top:clamp(54px,9dvh,96px);padding-bottom:clamp(60px,10dvh,100px)}
+.scene.story{overflow:hidden!important;overflow:clip!important;height:100vh;height:100dvh}
+#sGal.gscroll{height:auto!important;min-height:0;padding-bottom:110px}
+/* Hành trình: khung sticky + 5 cột mốc */
+#sB{height:380vh;height:380dvh;background:none!important;display:block}
+#sB>.stick{position:sticky!important;top:0;height:100vh;height:100dvh;overflow:hidden;background:radial-gradient(120% 90% at 50% 0,#5e1526,#2a0810 62%,#12030a)}
+#sB>.stick>*{position:absolute}
+#sB .jr-s{position:absolute;left:0;width:2px;top:calc(50vh + var(--i)*60vh);top:calc(50dvh + var(--i)*60dvh);height:60vh;height:60dvh;pointer-events:none;visibility:hidden}
+/* Dải chuyển màu giữa các phần */
+#sC:before,#sC:after{content:"";position:absolute;left:0;right:0;z-index:3;pointer-events:none;height:24%}
+#sC:before{top:0;background:linear-gradient(#12030a,rgba(18,3,10,.0))}
+#sC:after{bottom:0;background:linear-gradient(rgba(26,6,16,0),#1a0610)}
+#sGal:before{content:"";position:absolute;left:0;right:0;top:0;height:120px;pointer-events:none;background:linear-gradient(#1a0610,rgba(26,6,16,0))}
+/* Sợi chỉ đỏ định mệnh */
+#thread{position:absolute;left:8px;top:0;width:3px;height:0;z-index:6;pointer-events:none;border-radius:3px;
+ background:linear-gradient(180deg,rgba(255,214,160,0),rgba(255,214,160,.42) 3%,rgba(255,214,160,.42) 97%,rgba(255,214,160,0))}
+#thread .fill{position:absolute;inset:0;border-radius:3px;transform-origin:50% 0;transform:scaleY(var(--tp,0));background:linear-gradient(180deg,#fff0d8,#ff8fab 55%,#e0a05a);box-shadow:0 0 8px 1px rgba(255,130,160,.7);will-change:transform}
+#thread .bead{position:absolute;left:-7px;top:-7px;width:17px;height:15px;will-change:transform;transform:translate3d(0,calc(var(--tp,0) * var(--th,100px)),0);
+ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><radialGradient id='r' cx='.4' cy='.3' r='.9'><stop offset='0' stop-color='%23fff6e6'/><stop offset='.5' stop-color='%23ff8fae'/><stop offset='1' stop-color='%23d9577a'/></radialGradient></defs><path fill='url(%23r)' d='M12 21C4 14.500 1 10.500 1 7A5.500 5.500 0 0 1 12 5.500A5.500 5.500 0 0 1 23 7C23 10.500 20 14.500 12 21Z'/></svg>") center/contain no-repeat;filter:drop-shadow(0 0 6px rgba(255,130,170,.95))}
+#thread .th-n{position:absolute;left:-4px;width:11px;height:11px;margin-top:-5px;background:linear-gradient(135deg,#fff,#ffd56b);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+@media (min-width:900px){#thread{left:max(16px,2vw)}}
+@media (prefers-reduced-motion:reduce){#stage{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -1252,6 +1287,8 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
      - Đổi ẢNH THẬT: sửa đường dẫn trong src="./images/hanhtrinh-0N.jpg" (ảnh dọc hay ngang đều được, tên file không dấu).
      - Đổi MÀU vầng sáng của điểm đó: sửa bộ 3 số R,G,B trong style="..." (chữ c). Chưa có ảnh thì hiện khung chờ có tên file gợi ý. -->
 <section class="scene story night" id="sB" data-st="B">
+<!-- 📍 [HIỆU ỨNG] CUỘN DỌC LIÊN TỤC: khung .stick đứng yên (sticky) trong lúc khách cuộn qua 5 điểm đến; mỗi thẻ .jr-s là 1 cột mốc, cuộn tới đâu thì điểm đến đó sáng lên (IntersectionObserver). -->
+<div class="stick">
 <div class="hj-bg"><i></i><i class="r2"></i></div><div class="hj-tint"></div>
 <div class="jr-wrap">
  <div class="jr-road" id="jrRoad">
@@ -1277,6 +1314,7 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
   <figure class="jr-photo" style="--c:90,200,220"><div class="ph-in" data-file="hanhtrinh-05.jpg"><img src="./images/hanhtrinh-05.jpg" alt="Hạ Long" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 05 / 05</small><b>Hạ Long</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
  </div>
 </div>
+</div><i class="jr-s" data-i="0" style="--i:0" aria-hidden="true"></i><i class="jr-s" data-i="1" style="--i:1" aria-hidden="true"></i><i class="jr-s" data-i="2" style="--i:2" aria-hidden="true"></i><i class="jr-s" data-i="3" style="--i:3" aria-hidden="true"></i><i class="jr-s" data-i="4" style="--i:4" aria-hidden="true"></i>
 </section>
 <section class="scene story" id="sC" data-st="C"></section>
 <!-- 📍 [TÊN] PHÒNG LAB (cuộn dọc): sửa tiêu đề "Phòng Lab · Bộ sưu tập" và dòng "Specimen 01 — 15" ngay bên dưới. 15 ảnh nằm trong các thẻ <figure> phía dưới, theo đúng thứ tự cuộn. -->
@@ -1428,39 +1466,18 @@ try{const g=new URLSearchParams(location.search).get('to');if(g)$('#guest').text
 if(CFG.photoA||CFG.photoB){$$('.pola div').forEach((d,i)=>{const s=i?CFG.photoB:CFG.photoA;if(s)d.outerHTML='<img loading="lazy" decoding="async" alt="" src="'+s+'">'})}
 // dots
 scenes.forEach((_,i)=>{const b=document.createElement('button');b.className='dot';b.setAttribute('aria-label','Trang '+(i+1));b.onclick=()=>go(i);dotsEl.appendChild(b)});
-function go(i){if(i<0||i>=scenes.length||i===cur||lock)return;lock=true;const fw=i>cur,prev=cur;cur=i;
- /* 📍 [HIỆU NĂNG] Chuyển cảnh: chỉ 2 cảnh đang chuyển được đẩy lên GPU; việc nặng (story/after) dời sang khung hình sau để không giật đầu chuyển cảnh */
- [scenes[prev],scenes[i]].forEach(s=>{s.classList.add('tr');clearTimeout(s._tr);s._tr=setTimeout(()=>s.classList.remove('tr'),1400)});
- scenes.forEach((s,k)=>{s.classList.toggle('active',k===i);s.classList.toggle('past',k<i)});
- $$('.dot').forEach((d,k)=>d.classList.toggle('on',k===i));$('#up').style.visibility=i?'visible':'hidden';$('#nxt').style.visibility=i<scenes.length-1?'visible':'hidden';requestAnimationFrame(()=>requestAnimationFrame(()=>{if(cur!==i)return;after(fw);story();galStart()}));
- setTimeout(()=>lock=false,900)}
-$('#up').onclick=()=>nav(-1);
-// wheel / touch / keys
-let wt=0;/* 📍 [HIỆU ỨNG] Điều hướng slide: nếu trang đang có nội dung cuộn được (Phòng Lab, hoặc màn hình thấp) thì cuộn trong trang trước;
-   chỉ khi chạm mép trên/dưới rồi cuộn/vuốt tiếp thì mới chuyển slide. */
-const SCR=t=>{const s=t.closest&&t.closest('.scene');return s&&getComputedStyle(s).overflowY==='auto'&&s.scrollHeight>s.clientHeight+2?s:null};
-const edge=s=>[s.scrollTop<=40,s.scrollTop+s.clientHeight>=s.scrollHeight-40];   // 40px gần mép là tính như đã chạm mép
-/* 📍 [HIỆU ỨNG] CUỘN / VUỐT NHẸ LÀ QUA TRANG
-   - Con lăn chuột & touchpad: lực cuộn được CỘNG DỒN, chỉ cần khoảng 40 đơn vị (một nấc cuộn) là chuyển trang. Muốn nhạy hơn: giảm số 40.
-   - Vuốt trên điện thoại: chỉ cần ~32px (trước là 55px).
-   - Trang có nội dung dài (Phòng Lab, màn hình thấp): cuộn trong trang trước; tới mép cách 60px thì vuốt thêm là sang trang.
-   - Đã có nút mũi tên ⌄ ở đáy màn hình và nút ↑ ở góc phải để chuyển trang bằng cú bấm.
-   - Chống "trôi quán tính" của touchpad Mac: sau khi chuyển trang, các nấc cuộn trôi theo sẽ bị bỏ qua. */
-let acc=0,accT=0,lastW=0,lastD=0;
-addEventListener('wheel',e=>{if(e.target.closest('textarea,#lb'))return;const sc=SCR(e.target);
- if(sc){const up=e.deltaY<0,[t,b]=edge(sc);if(!((up&&t)||(!up&&b))){sc._e=0;return}if(!sc._e){sc._e=Date.now();return}if(Date.now()-sc._e<120)return}
- let dy=e.deltaY*(e.deltaMode==1?33:e.deltaMode==2?400:1);const n=Date.now(),fresh=n-lastW>90||Math.abs(dy)>Math.abs(lastD)*1.3;lastW=n;lastD=dy;
- if(n-wt<800||(n-wt<2200&&!fresh))return;
- if(n-accT>220)acc=0;accT=n;acc+=dy;if(Math.abs(acc)<40)return;wt=n;acc=0;if(sc)sc._e=0;nav(dy>0?1:-1)},{passive:true});
+const app=$('#app'),STG=$('#stage');
+/* ===================== 📍 [HIỆU ỨNG] CUỘN DỌC LIÊN TỤC (tìm: CUỘN DỌC LIÊN TỤC) =====================
+   Toàn bộ thiệp là MỘT trang cuộn dọc tự nhiên (không còn chuyển slide / khóa cuộn).
+   - go(i): cuộn mượt tới phần thứ i (dùng cho chấm điều hướng bên phải và nút mũi tên).
+   - Phần nào đang ở giữa màn hình được coi là "phần hiện tại" (cur) -> bật hiệu ứng riêng của phần đó, tắt hiệu ứng nặng của phần khác.
+   - Mọi hoạt ảnh xuất hiện đều do IntersectionObserver kích hoạt (xem khối IntersectionObserver ở cuối file). */
+function go(i){const t=scenes[i];if(!t)return;STG.scrollTo({top:t.offsetTop,behavior:'smooth'})}
+function setCur(i){if(setCur.ok&&i===cur)return;const fw=!setCur.ok||i>=cur;setCur.ok=1;cur=i;
+ $$('.dot').forEach((d,k)=>d.classList.toggle('on',k===i));$('#up').style.visibility=i?'visible':'hidden';$('#nxt').style.visibility=i<scenes.length-1?'visible':'hidden';
+ after(fw);story();galStart()}
+$('#up').onclick=()=>STG.scrollTo({top:0,behavior:'smooth'});
 
-let y0=null,sc0=null,t0=false,b0=false;const app=$('#app');
-app.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;sc0=SCR(e.target);if(sc0)[t0,b0]=edge(sc0)},{passive:true});
-app.addEventListener('touchend',e=>{if(y0===null)return;const d=y0-e.changedTouches[0].clientY;y0=null;if(Math.abs(d)<=32||e.target.closest('input,textarea,#lb'))return;
- if(sc0){const[t,b]=edge(sc0);if(!((d>0&&b0&&b)||(d<0&&t0&&t)))return}nav(d>0?1:-1)});
-addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(document.activeElement.tagName)||lb.classList.contains('on'))return;
- const dn=['ArrowDown','PageDown',' '].includes(e.key),up=['ArrowUp','PageUp'].includes(e.key);if(!dn&&!up)return;
- const sc=SCR(scenes[cur]);if(sc){const[t,b]=edge(sc);if((dn&&!b)||(up&&!t)){sc.scrollBy({top:(dn?1:-1)*sc.clientHeight*.7,behavior:'smooth'});e.preventDefault();return}}
- nav(dn?1:-1)});
 // 3D tilt (pointer + gyro)
 $$('.tilt').forEach(c=>{const sc=c.closest('.scene');
  sc.addEventListener('pointermove',e=>{if(LITE)return;const r=sc.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*14+'deg');c.style.setProperty('--rx',(-((e.clientY-r.top)/r.height-.5))*10+'deg')});
@@ -1595,10 +1612,10 @@ const ICO=(n,c)=>'<span class="med '+(c||'')+'">'+RG+'<svg class="gl" viewBox="0
    Ảnh nào cuộn tới mới "bừng sáng" (mờ -> rõ, trượt nhẹ lên). Ảnh chưa tới thì ẩn, và nhờ loading="lazy" trình duyệt chỉ tải ảnh khi gần tới.
    Muốn ảnh hiện sớm/muộn hơn: sửa rootMargin (-10% = hiện khi ảnh lên cao hơn đáy 10%) hoặc threshold (.12 = hiện khi thấy 12% ảnh). */
 let galIO=null;
-function galStart(){const s=scenes[cur];if(!s||!s.classList.contains('gscroll')||galIO)return;
+function galStart(){const s=$('#sGal');if(!s||galIO)return;
  const all=[...s.querySelectorAll('.gi')];
  if(!('IntersectionObserver' in window)){all.forEach(f=>f.classList.add('in'));return}   // trình duyệt quá cũ: hiện hết
- galIO=new IntersectionObserver(es=>{es.filter(e=>e.isIntersecting).forEach((e,k)=>{e.target.style.setProperty('--sd',(k*.15)+'s');e.target.classList.add('in');galIO.unobserve(e.target)})},{root:s,rootMargin:'0px 0px -10% 0px',threshold:.12});
+ galIO=new IntersectionObserver(es=>{es.filter(e=>e.isIntersecting).forEach((e,k)=>{e.target.style.setProperty('--sd',(k*.15)+'s');e.target.classList.add('in');galIO.unobserve(e.target)})},{root:null,rootMargin:'0px 0px -10% 0px',threshold:.12});
  all.forEach(f=>galIO.observe(f))}
 /* 📍 [KÍCH THƯỚC] ẢNH DỌC / NGANG TỰ THÍCH ỨNG: khi ảnh tải xong, khung tự lấy đúng tỉ lệ của ảnh (giới hạn từ 0.62 đến 1.78) nên ảnh dọc hay ngang đều không bị cắt xấu.
    Muốn ép một tỉ lệ cố định cho 1 ảnh: xóa đoạn này và sửa số r:... trong style của ảnh đó. */
@@ -1606,10 +1623,9 @@ $$('.gi').forEach(f=>{const im=f.querySelector('img'),set=()=>{if(im.naturalWidt
 /* 📍 [HIỆU ỨNG] SỢI DÂY PHÂN TỬ NỐI CÁC ẢNH (concept "nghiên cứu dược"): một sợi dây vàng chạy dọc giữa các ảnh, mỗi ảnh là một "nguyên tử" lục giác gắn vào dây.
    Sợi dây sáng dần theo vị trí cuộn của khách. */
 const GS=$('#sGal'),GL=$('.gl-list');
-const gprog=()=>{const r=GL.getBoundingClientRect(),s=GS.getBoundingClientRect();GL.style.setProperty('--p',Math.max(0,Math.min(1,(s.top+s.height*.62-r.top)/r.height)).toFixed(3))};
-GS.addEventListener('scroll',gprog,{passive:true});
+const gprog=()=>{const r=GL.getBoundingClientRect();GL.style.setProperty('--p',Math.max(0,Math.min(1,(innerHeight*.62-r.top)/Math.max(1,r.height))).toFixed(3))};
 /* 📍 [HIỆU ỨNG] ỐNG NGHIỆM: thêm vệt sáng chạy + bong bóng nổi dọc ống */
-(function(){const H=GL.scrollHeight||1200;GL.style.setProperty('--lh',H+'px');const f=document.createElement('i');f.className='flow';GL.appendChild(f);
+(function(){try{new ResizeObserver(()=>GL.style.setProperty('--lh',GL.offsetHeight+'px')).observe(GL)}catch(e){GL.style.setProperty('--lh','1200px')}const f=document.createElement('i');f.className='flow';GL.appendChild(f);
  for(let i=0;i<7;i++){const b=document.createElement('i');b.className='bub';b.style.cssText='--t:'+(4+Math.random()*3).toFixed(1)+'s;--dl:-'+(Math.random()*6).toFixed(1)+'s;--sw:'+((Math.random()*8-4)|0)+'px';GL.appendChild(b)}})();
 $('.gl-end').onclick=()=>go(cur+1);
 $('#nxt').onclick=()=>nav(1);
@@ -1745,12 +1761,10 @@ function hjGo(i){HJ.i=i;HJ.last=Date.now();clearTimeout(HJ.t);const s=$('#sB');
  const to=HJ.L[i]||0,dur=Math.max(900,Math.min(2000,Math.abs(to-HJ.cp)*2.2));
  jrMove(to,dur,()=>{if(cur!==IBS||HJ.i!==i)return;const q=jrPos(to);JMS[i].classList.add('on');jrMorphIn(i);JPH[i].classList.add('on');
   s.classList.remove('pulse');void s.offsetWidth;s.classList.add('pulse');jrBurst(q.x,q.y);
-  if(i<HJ.n-1){HJ.t=setTimeout(()=>hjGo(i+1),HJ.hold);tm.push(HJ.t)}})}
-function hjStart(){cancelAnimationFrame(HJ.raf);clearTimeout(HJ.t);jrLayout();HJ.cp=0;jrPos(0);JPH.forEach(p=>p.classList.remove('on'));JMS.forEach(b=>b.classList.remove('on','done'));JFX.innerHTML='';HJ.i=0;setTimeout(()=>{if(cur===IBS)hjGo(0)},500)}
+  })}
+function hjStart(){cancelAnimationFrame(HJ.raf);clearTimeout(HJ.t);jrLayout();HJ.cp=0;jrPos(0);JPH.forEach(p=>p.classList.remove('on'));JMS.forEach(b=>b.classList.remove('on','done'));JFX.innerHTML='';HJ.i=-1;setTimeout(()=>{if(cur===IBS)hjGo(HJ.want|0)},420)}
 addEventListener('resize',()=>{jrLayout()});
-/* Cuộn chuột / vuốt / phím mũi tên trong trang này: chuyển từng điểm đến trước, hết 5 điểm mới sang trang kế */
-const SUBS={};SUBS[IBS]=d=>{const n=HJ.i+d;if(n<0||n>=HJ.n)return false;if(Date.now()-HJ.last<900)return true;hjGo(n);return true};
-function nav(d){const f=SUBS[cur];if(f&&f(d))return;go(cur+d)}
+function nav(d){go(Math.max(0,Math.min(scenes.length-1,cur+d)))}
 const LH='<svg viewBox="0 0 80 200"><circle cx="40" cy="26" r="24" fill="rgba(255,233,160,.38)"/><path d="M24 196L32 44H48L56 196z" fill="#fff"/><path d="M30.600 80h18.800l1 26H29.600zM27.600 140h24.800l1 26H26.600z" fill="#d6404e"/><rect x="26" y="38" width="28" height="6" fill="#3a0912"/><rect x="30" y="14" width="20" height="24" rx="3" fill="#ffe9a0" stroke="#fff3cf"/><path d="M27 15L40 1L53 15z" fill="#d6404e"/></svg>';
 /* 📍 [TÊN] Cảnh cầu hôn (Love Story 3): hai chữ An và Trang nằm trong cặp thẻ <text ...>An</text> và <text ...>Trang</text> bên dưới. Sửa chữ ở giữa. */
 $('#sC').classList.add('night');
@@ -1946,7 +1960,7 @@ function skyFlash(col,big){const e=$('#sC .sf');if(!e)return;e.style.setProperty
    Cứ ~0,4 giây ống nhả ra 1 hạt (trái tim hoặc phân tử 2 nguyên tử) với màu ngẫu nhiên (hồng, vàng, xanh ngọc, tím, cam), trôi ra hai bên rồi tan. Tối đa 26 hạt. */
 (function(){const HC=['255,120,160','255,170,190','255,214,150','255,236,200','255,140,120'];let n=0;
  const spawn=()=>{if(scenes[cur]!==GS||document.hidden||n>(LITE?12:26))return;const r=GL.getBoundingClientRect(),s=GS.getBoundingClientRect();if(r.height<10)return;
-  const y=Math.max(0,Math.min(r.height-10,s.top-r.top+Math.random()*s.height)),tube=parseFloat(getComputedStyle(GL).getPropertyValue('--tube'))||10,desk=innerWidth>=900,x=desk?r.width/2:-14-tube/2,side=desk?(Math.random()<.5?-1:1):1;
+  const y=Math.max(0,Math.min(r.height-10,-r.top+Math.random()*innerHeight)),tube=parseFloat(getComputedStyle(GL).getPropertyValue('--tube'))||10,desk=innerWidth>=900,x=desk?r.width/2:-14-tube/2,side=desk?(Math.random()<.5?-1:1):1;
   const e=document.createElement('i'),c=HC[Math.random()*HC.length|0],mol=false;e.className='hrt'+(mol?' mol':'');
   e.style.cssText='left:'+x+'px;top:'+y+'px;--hc:'+c+';--dx:'+(side*(30+Math.random()*80))+'px;--dy:'+(-40-Math.random()*90)+'px;--rt:'+((Math.random()-.5)*80)+'deg;--s:'+(.8+Math.random()*.9)+';--t:'+(2.6+Math.random()*1.8)+'s';
   e.innerHTML=mol?'<b></b><b></b>':'♥';n++;e.addEventListener('animationend',()=>{e.remove();n--});GL.appendChild(e)};
@@ -1998,13 +2012,32 @@ function skyFlash(col,big){const e=$('#sC .sf');if(!e)return;e.style.setProperty
  const hs=document.createElement('div');hs.className='hero-sparks';scenes[0].insertBefore(hs,scenes[0].firstChild);
  for(let i=0;i<(LITE?12:26);i++){const e=document.createElement('i');e.style.cssText='left:'+(Math.random()*96+2)+'%;top:'+(Math.random()*92+2)+'%;--s:'+(6+Math.random()*10)+'px;--t:'+(2.2+Math.random()*2.4)+'s;--dl:-'+(Math.random()*4)+'s';hs.appendChild(e)}
  let opened=false;
- function openCurtain(){if(opened)return;opened=true;cu.classList.add('open');app.classList.add('hero-play');if(hl)hl.classList.add('go');
+ function openCurtain(){if(opened)return;opened=true;app.classList.add('opened');cu.classList.add('open');app.classList.add('hero-play');if(hl)hl.classList.add('go');
   setTimeout(()=>{try{burst(90)}catch(e){}},1300);setTimeout(()=>{try{burst(60)}catch(e){}},2500);
   setTimeout(()=>{lock=false},1800);setTimeout(()=>{cu.style.display='none';if(hl)hl.style.display='none'},3300);setTimeout(()=>app.classList.remove('hero-play'),9500)}
  cu.addEventListener('click',openCurtain);cu.addEventListener('touchend',openCurtain,{passive:true});
  setTimeout(openCurtain,1700)})();
 // start
-scenes[0].classList.add('active');$$('.dot')[0].classList.add('on');$('#up').style.visibility='hidden';
+$('#up').style.visibility='hidden';
+/* ===================== 📍 [HIỆU ỨNG] INTERSECTIONOBSERVER: kích hoạt hoạt ảnh khi cuộn tới (tìm: INTERSECTIONOBSERVER) =====================
+   (1) IOa: phần nào đi vào màn hình thì thêm class .active (chạy hoạt ảnh xuất hiện), đi ra hẳn thì bỏ (dừng mọi hoạt ảnh lặp -> nhẹ máy).
+   (2) IOc: phần nào đang nằm ở đường ngang GIỮA màn hình là phần hiện tại: chạy hiệu ứng nặng (pháo hoa, sao băng...) và dọn khi cuộn qua.
+   (3) IOs: 5 cột mốc ẩn trong phần Hành trình, cuộn tới cột mốc nào thì chiếc xe/con trỏ chạy tới điểm đến đó. */
+let curT=0,want=0;
+const IOa=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('active',e.isIntersecting)),{rootMargin:'-8% 0px -8% 0px',threshold:0});
+const IOc=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;want=scenes.indexOf(e.target);clearTimeout(curT);curT=setTimeout(()=>setCur(want),setCur.ok?130:0)}),{rootMargin:'-50% 0px -50% 0px',threshold:0});
+const IOs=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const i=+e.target.dataset.i;HJ.want=i;if(cur===IBS&&HJ.i!==i&&HJ.i!==-1)hjGo(i)}),{rootMargin:'-50% 0px -50% 0px',threshold:0});
+scenes.forEach(x=>{IOa.observe(x);IOc.observe(x)});$$('#sB .jr-s').forEach(x=>IOs.observe(x));
+/* ===== 📍 [HIỆU ỨNG] SỢI CHỈ ĐỎ ĐỊNH MỆNH (tìm: SỢI CHỈ) - dòng thời gian xuyên suốt Hành trình -> Cầu hôn -> Phòng Lab ===== */
+const TH=document.createElement('div');TH.id='thread';TH.setAttribute('aria-hidden','true');TH.innerHTML='<i class="fill"></i><i class="bead"></i>';STG.appendChild(TH);
+let thTop=0,thH=1;
+function thLayout(){const a=$('#sB'),z=$('#sGal');if(!a||!z)return;thTop=a.offsetTop;thH=Math.max(1,z.offsetTop+z.offsetHeight-thTop);TH.style.top=thTop+'px';TH.style.height=thH+'px';TH.style.setProperty('--th',thH+'px');
+ [a,$('#sC'),z].forEach((x,k)=>{let n=TH.querySelector('.th-n[data-k="'+k+'"]');if(!n){n=document.createElement('i');n.className='th-n';n.dataset.k=k;TH.appendChild(n)}n.style.top=(x.offsetTop-thTop+(k?0:6))+'px'});thProg()}
+function thProg(){TH.style.setProperty('--tp',Math.max(0,Math.min(1,(STG.scrollTop+innerHeight*.55-thTop)/thH)).toFixed(4))}
+let sq=0;STG.addEventListener('scroll',()=>{if(sq)return;sq=1;requestAnimationFrame(()=>{sq=0;thProg();if(GS.classList.contains('active'))gprog()})},{passive:true});
+try{const ro=new ResizeObserver(()=>{clearTimeout(thLayout.t);thLayout.t=setTimeout(thLayout,60)});scenes.forEach(x=>ro.observe(x))}catch(e){addEventListener('resize',thLayout)}
+addEventListener('load',thLayout);thLayout();galStart();
+
 
 /* 📍 [HIỆU NĂNG] Giải mã sẵn ảnh lúc rảnh (sau khi mở màn) để lúc khung ảnh hiện ra không bị khựng */
 setTimeout(()=>{const im=[...document.querySelectorAll('img[loading=lazy]')];let k=0;(function nx(){if(k>=im.length)return;const e=im[k++];e.loading='eager';(e.decode?e.decode():Promise.resolve()).catch(()=>{}).then(()=>setTimeout(()=>('requestIdleCallback' in window?requestIdleCallback(nx,{timeout:900}):nx()),250))})()},7000);
