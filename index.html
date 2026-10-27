@@ -1134,6 +1134,14 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
  .gi:before{animation:none;background:linear-gradient(90deg,#ffe3c0,#ff9ab5);background-size:100% 100%;box-shadow:0 0 10px 1px rgba(255,140,170,.7);height:3px;top:35px}
 }
 @media (max-width:899px){.gscroll{padding-left:50px}}
+
+/* ===== 📍 [ẢNH] KHUNG ẢNH TỰ ÔM TỶ LỆ ẢNH (tìm: KHUNG ẢNH TỰ ÔM) ===== */
+.jr-photo{inset:auto;left:50%;top:50%;width:var(--fw,100%);height:var(--fh,100%);max-width:100%;max-height:100%;transform:translate(-50%,-50%);
+ transition:opacity .45s ease,visibility 0s .45s,width .75s cubic-bezier(.3,.8,.2,1),height .75s cubic-bezier(.3,.8,.2,1)}
+.jr-photo.on{transition:opacity .25s ease,width .75s cubic-bezier(.3,.8,.2,1),height .75s cubic-bezier(.3,.8,.2,1)}
+.jr-photo.nt,.jr-photo.nt.on{transition:none!important}
+.ph-in img{object-position:50% 28%}
+@media (prefers-reduced-motion:reduce){.jr-photo,.jr-photo.on{transition:opacity .25s}}
 </style>
 </head>
 <body>
@@ -1250,15 +1258,15 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
  </div>
  <div class="jr-stage">
 <!-- 📍 [ẢNH] ĐIỂM ĐẾN 01: tên ở thẻ b, ảnh ở src bên dưới -->
-  <figure class="jr-photo" style="--c:255,150,110"><div class="ph-in" data-file="hanhtrinh-01.jpg"><img src="./images/hanhtrinh-01.jpg" alt="Đà Nẵng" loading="lazy" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 01 / 05</small><b>Đà Nẵng</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
+  <figure class="jr-photo" style="--c:255,150,110"><div class="ph-in" data-file="hanhtrinh-01.jpg"><img src="./images/hanhtrinh-01.jpg" alt="Đà Nẵng" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 01 / 05</small><b>Đà Nẵng</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
 <!-- 📍 [ẢNH] ĐIỂM ĐẾN 02: tên ở thẻ b, ảnh ở src bên dưới -->
-  <figure class="jr-photo" style="--c:130,200,110"><div class="ph-in" data-file="hanhtrinh-02.jpg"><img src="./images/hanhtrinh-02.jpg" alt="Sapa" loading="lazy" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 02 / 05</small><b>Sapa</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
+  <figure class="jr-photo" style="--c:130,200,110"><div class="ph-in" data-file="hanhtrinh-02.jpg"><img src="./images/hanhtrinh-02.jpg" alt="Sapa" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 02 / 05</small><b>Sapa</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
 <!-- 📍 [ẢNH] ĐIỂM ĐẾN 03: tên ở thẻ b, ảnh ở src bên dưới -->
-  <figure class="jr-photo" style="--c:140,170,255"><div class="ph-in" data-file="hanhtrinh-03.jpg"><img src="./images/hanhtrinh-03.jpg" alt="Fansipan" loading="lazy" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 03 / 05</small><b>Fansipan</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
+  <figure class="jr-photo" style="--c:140,170,255"><div class="ph-in" data-file="hanhtrinh-03.jpg"><img src="./images/hanhtrinh-03.jpg" alt="Fansipan" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 03 / 05</small><b>Fansipan</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
 <!-- 📍 [ẢNH] ĐIỂM ĐẾN 04: tên ở thẻ b, ảnh ở src bên dưới -->
-  <figure class="jr-photo" style="--c:255,190,130"><div class="ph-in" data-file="hanhtrinh-04.jpg"><img src="./images/hanhtrinh-04.jpg" alt="Điểm đến thứ 4" loading="lazy" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 04 / 05</small><b>Điểm đến thứ 4</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
+  <figure class="jr-photo" style="--c:255,190,130"><div class="ph-in" data-file="hanhtrinh-04.jpg"><img src="./images/hanhtrinh-04.jpg" alt="Điểm đến thứ 4" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 04 / 05</small><b>Điểm đến thứ 4</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
 <!-- 📍 [ẢNH] ĐIỂM ĐẾN 05: tên ở thẻ b, ảnh ở src bên dưới -->
-  <figure class="jr-photo" style="--c:90,200,220"><div class="ph-in" data-file="hanhtrinh-05.jpg"><img src="./images/hanhtrinh-05.jpg" alt="Hạ Long" loading="lazy" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 05 / 05</small><b>Hạ Long</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
+  <figure class="jr-photo" style="--c:90,200,220"><div class="ph-in" data-file="hanhtrinh-05.jpg"><img src="./images/hanhtrinh-05.jpg" alt="Hạ Long" decoding="async" onerror="this.remove()"><i class="stk"></i><figcaption><small>TRẠM 05 / 05</small><b>Hạ Long</b></figcaption></div><i class="ln t"></i><i class="ln r"></i><i class="ln b"></i><i class="ln l"></i><i class="cn c1"></i><i class="cn c2"></i><i class="cn c3"></i><i class="cn c4"></i></figure>
  </div>
 </div>
 </section>
@@ -1692,7 +1700,20 @@ function jrLayout(){const W=JRD.clientWidth,H=JRD.clientHeight;if(!W||!H)return;
    if(PX.length){acc+=Math.hypot(x-PX[PX.length-1],y-PY[PY.length-1])}PX.push(x);PY.push(y);CL.push(acc)}segEnd.push(PX.length-1)}
  const real=JP[0].getTotalLength(),sc=real/acc;HJ.tot=real;HJ.PX=PX;HJ.PY=PY;HJ.CL=CL.map(v=>v*sc);JLIT.style.strokeDasharray=HJ.tot;
  HJ.L=[];for(let i=0;i<5;i++){const w=f[i+1];HJ.L.push(HJ.CL[segEnd[i]]);JMS[i].style.left=w[0]+'px';JMS[i].style.top=w[1]+'px'}
- jrPos(HJ.cp)}
+ jrPos(HJ.cp);jrFit()}
+
+/* 📍 [ẢNH] [KHUNG] KHUNG ẢNH TỰ ÔM TỶ LỆ ẢNH THẬT (tìm: KHUNG ẢNH TỰ ÔM)
+   Mỗi ảnh được đo tỷ lệ thật (rộng/cao). Khung = ảnh vừa khít trong vùng cho phép của màn hình (không bao giờ tràn), giữ đúng tỷ lệ ảnh.
+   Ảnh dọc dài: giới hạn theo CHIỀU CAO màn hình nên luôn xem trọn ảnh không cần cuộn; tỷ lệ quá cực đoan (< 9:16 hoặc > 2.2:1) thì chỉ cắt nhẹ rìa, giữ phần mặt người.
+   Đổi giới hạn: JR_AR_MIN / JR_AR_MAX bên dưới. */
+const JR_AR_MIN=.5625,JR_AR_MAX=2.2;
+function jrAR(f){const im=f.querySelector('img');if(im&&im.naturalWidth>0)return Math.max(JR_AR_MIN,Math.min(JR_AR_MAX,im.naturalWidth/im.naturalHeight));return 4/3}
+function jrFit(){const st=$('#sB .jr-stage');if(!st)return;const W=st.clientWidth,H=st.clientHeight;if(W<40||H<40)return;const pad=innerWidth>=900?14:11,aw=W-2*pad,ah=H-2*pad;
+ JPH.forEach(f=>{const r=jrAR(f);let w=aw,h=w/r;if(h>ah){h=ah;w=h*r}f.style.setProperty('--fw',Math.round(w+2*pad)+'px');f.style.setProperty('--fh',Math.round(h+2*pad)+'px');f.dataset.ar=r.toFixed(3)})}
+JPH.forEach(f=>{const im=f.querySelector('img');if(im){im.addEventListener('load',jrFit);if(im.complete)jrFit()}});
+try{new ResizeObserver(()=>jrFit()).observe($('#sB .jr-stage'))}catch(e){addEventListener('resize',jrFit)}
+/* khung mới bắt đầu từ kích thước khung ảnh trước rồi giãn mượt sang tỷ lệ của ảnh mình */
+function jrMorphIn(i){const f=JPH[i],p=JPH[i-1];if(!p)return;const tw=f.style.getPropertyValue('--fw'),th=f.style.getPropertyValue('--fh');if(!tw)return;f.classList.add('nt');f.style.setProperty('--fw',p.style.getPropertyValue('--fw'));f.style.setProperty('--fh',p.style.getPropertyValue('--fh'));void f.offsetWidth;f.classList.remove('nt');requestAnimationFrame(()=>{f.style.setProperty('--fw',tw);f.style.setProperty('--fh',th)})}
 function jrPt(L){const C=HJ.CL;let lo=0,hi=C.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(C[m]<=L)lo=m;else hi=m}const d=C[hi]-C[lo]||1,t=Math.max(0,Math.min(1,(L-C[lo])/d));return{x:HJ.PX[lo]+(HJ.PX[hi]-HJ.PX[lo])*t,y:HJ.PY[lo]+(HJ.PY[hi]-HJ.PY[lo])*t}}
 function jrPos(L){HJ.cp=L;const q=jrPt(Math.max(0,Math.min(HJ.tot,L)));JCUR.style.transform='translate3d('+q.x+'px,'+q.y+'px,0)';JLIT.style.strokeDashoffset=HJ.tot-L;return q}
 function jrFxAt(x,y,k){const e=document.createElement('i');e.className=k;e.style.left=x+'px';e.style.top=y+'px';JFX.appendChild(e);return e}
@@ -1708,7 +1729,7 @@ function hjGo(i){HJ.i=i;HJ.last=Date.now();clearTimeout(HJ.t);const s=$('#sB');
  s.style.setProperty('--c',JPH[i].style.getPropertyValue('--c').trim()||'255,200,120');
  cap(s,'Trạm 0'+(i+1)+' · '+JPH[i].querySelector('figcaption b').textContent);
  const to=HJ.L[i]||0,dur=Math.max(900,Math.min(2000,Math.abs(to-HJ.cp)*2.2));
- jrMove(to,dur,()=>{if(cur!==IBS||HJ.i!==i)return;const q=jrPos(to);JMS[i].classList.add('on');JPH[i].classList.add('on');
+ jrMove(to,dur,()=>{if(cur!==IBS||HJ.i!==i)return;const q=jrPos(to);JMS[i].classList.add('on');jrMorphIn(i);JPH[i].classList.add('on');
   s.classList.remove('pulse');void s.offsetWidth;s.classList.add('pulse');jrBurst(q.x,q.y);
   if(i<HJ.n-1){HJ.t=setTimeout(()=>hjGo(i+1),HJ.hold);tm.push(HJ.t)}})}
 function hjStart(){cancelAnimationFrame(HJ.raf);clearTimeout(HJ.t);jrLayout();HJ.cp=0;jrPos(0);JPH.forEach(p=>p.classList.remove('on'));JMS.forEach(b=>b.classList.remove('on','done'));JFX.innerHTML='';HJ.i=0;setTimeout(()=>{if(cur===IBS)hjGo(0)},500)}
