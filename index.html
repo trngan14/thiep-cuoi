@@ -1142,6 +1142,14 @@ background:linear-gradient(180deg,#a01e33,var(--wine));box-shadow:inset 0 0 0 1p
 .jr-photo.nt,.jr-photo.nt.on{transition:none!important}
 .ph-in img{object-position:50% 28%}
 @media (prefers-reduced-motion:reduce){.jr-photo,.jr-photo.on{transition:opacity .25s}}
+
+/* ===== 📍 [ẢNH] KHUNG ẢNH ÔM TỶ LỆ v2 (tìm: KHUNG ẢNH ÔM) ===== */
+.jr-photo{contain:layout style}
+.ph-in{cursor:zoom-in}
+.ph-in img{transition:object-position .4s}
+.jr-zoom{position:absolute;z-index:6;right:10px;top:10px;display:none;padding:6px 11px;border-radius:999px;border:1px solid rgba(255,230,170,.8);background:rgba(36,6,14,.72);color:#ffe9b8;font:600 11.5px var(--sans);letter-spacing:.04em;cursor:pointer}
+.jr-photo.cropped .jr-zoom{display:block}
+#lb[data-m=jr] .lba{display:none}
 </style>
 </head>
 <body>
@@ -1607,7 +1615,7 @@ $('.gl-end').onclick=()=>go(cur+1);
 $('#nxt').onclick=()=>nav(1);
 /* 📍 [ẢNH] Khung xem lớn (lightbox): chạm vào ảnh đã hiện để phóng to. Ảnh luôn hiện TRỌN VẸN (object-fit: contain), không bị cắt/méo trên điện thoại. */
 const lb=$('#lb'),lbi=$('.lbi'),lbn=$('.lbn');let li=0;
-function show(i){const S=[...$$('.gi img')].map(x=>x.getAttribute('src')),n=S.length;li=(i+n)%n;const p=S[li];lbi.classList.remove('zoom');lbi.style.backgroundImage='';
+function show(i){$('#lb').dataset.m='';const S=[...$$('.gi img')].map(x=>x.getAttribute('src')),n=S.length;li=(i+n)%n;const p=S[li];lbi.classList.remove('zoom');lbi.style.backgroundImage='';
  if(p){lbi.classList.remove('nophoto');lbi.innerHTML='<img loading="lazy" decoding="async" alt="Ảnh cưới '+(li+1)+'" src="'+p+'" onerror="this.parentNode.classList.add(\'nophoto\');this.parentNode.textContent=\''+String(li+1).padStart(2,'0')+'\'">'}else{lbi.classList.add('nophoto');lbi.textContent=String(li+1).padStart(2,'0')}
  lbn.textContent=String(li+1).padStart(2,'0')+' / '+n;lb.classList.remove('on');void lb.offsetWidth;lb.classList.add('on')}
 $$('.gi').forEach((f,i)=>f.onclick=()=>{if(f.classList.contains('in'))show(i)});
@@ -1707,11 +1715,17 @@ function jrLayout(){const W=JRD.clientWidth,H=JRD.clientHeight;if(!W||!H)return;
    Ảnh dọc dài: giới hạn theo CHIỀU CAO màn hình nên luôn xem trọn ảnh không cần cuộn; tỷ lệ quá cực đoan (< 9:16 hoặc > 2.2:1) thì chỉ cắt nhẹ rìa, giữ phần mặt người.
    Đổi giới hạn: JR_AR_MIN / JR_AR_MAX bên dưới. */
 const JR_AR_MIN=.5625,JR_AR_MAX=2.2;
-function jrAR(f){const im=f.querySelector('img');if(im&&im.naturalWidth>0)return Math.max(JR_AR_MIN,Math.min(JR_AR_MAX,im.naturalWidth/im.naturalHeight));return 4/3}
+/* 📍 [ẢNH] Mỗi <figure class="jr-photo"> có thể khai báo thêm: data-ratio="3/4" (tỷ lệ ảnh, để khung đúng ngay trước khi ảnh tải xong) và data-focus="50% 20%" (phần ảnh được giữ lại khi phải cắt) */
+function jrNat(f){const im=f.querySelector('img');if(im&&im.naturalWidth>0)return im.naturalWidth/im.naturalHeight;const d=(f.dataset.ratio||'').split('/');const v=d.length>1?(+d[0])/(+d[1]):+d[0];return v>0?v:0}
+function jrAR(f){const n=jrNat(f);return n?Math.max(JR_AR_MIN,Math.min(JR_AR_MAX,n)):4/3}
 function jrFit(){const st=$('#sB .jr-stage');if(!st)return;const W=st.clientWidth,H=st.clientHeight;if(W<40||H<40)return;const pad=innerWidth>=900?14:11,aw=W-2*pad,ah=H-2*pad;
- JPH.forEach(f=>{const r=jrAR(f);let w=aw,h=w/r;if(h>ah){h=ah;w=h*r}f.style.setProperty('--fw',Math.round(w+2*pad)+'px');f.style.setProperty('--fh',Math.round(h+2*pad)+'px');f.dataset.ar=r.toFixed(3)})}
+ JPH.forEach(f=>{const r=jrAR(f);let w=aw,h=w/r;if(h>ah){h=ah;w=h*r}f.style.setProperty('--fw',Math.round(w+2*pad)+'px');f.style.setProperty('--fh',Math.round(h+2*pad)+'px');f.dataset.ar=r.toFixed(3);const n=jrNat(f),im=f.querySelector('img');f.classList.toggle('cropped',!!n&&(n<JR_AR_MIN-.01||n>JR_AR_MAX+.01));if(im&&f.dataset.focus)im.style.objectPosition=f.dataset.focus})}
 JPH.forEach(f=>{const im=f.querySelector('img');if(im){im.addEventListener('load',jrFit);if(im.complete)jrFit()}});
 try{new ResizeObserver(()=>jrFit()).observe($('#sB .jr-stage'))}catch(e){addEventListener('resize',jrFit)}
+/* 📍 [ẢNH] Ảnh quá dài/quá dẹt bị cắt nhẹ cho vừa khung: hiện nút "Xem trọn ảnh"; chạm vào ảnh nào cũng mở bản đầy đủ (contain, không cắt) */
+JPH.forEach((f,i)=>{const b=document.createElement('button');b.type='button';b.className='jr-zoom';b.textContent='⤢ Xem trọn ảnh';f.querySelector('.ph-in').appendChild(b);
+ const open=e=>{const im=f.querySelector('img');if(!im||!im.getAttribute('src'))return;e&&e.stopPropagation();const lb=$('#lb'),lbi=$('.lbi');lbi.classList.remove('zoom','nophoto');lbi.style.backgroundImage='';lbi.innerHTML='<img decoding="async" alt="" src="'+im.getAttribute('src')+'">';lb.dataset.m='jr';$('.lbn').textContent='Trạm 0'+(i+1)+' / 05';lb.classList.remove('on');void lb.offsetWidth;lb.classList.add('on')};
+ b.onclick=open;f.querySelector('.ph-in').addEventListener('click',open)});
 /* khung mới bắt đầu từ kích thước khung ảnh trước rồi giãn mượt sang tỷ lệ của ảnh mình */
 function jrMorphIn(i){const f=JPH[i],p=JPH[i-1];if(!p)return;const tw=f.style.getPropertyValue('--fw'),th=f.style.getPropertyValue('--fh');if(!tw)return;f.classList.add('nt');f.style.setProperty('--fw',p.style.getPropertyValue('--fw'));f.style.setProperty('--fh',p.style.getPropertyValue('--fh'));void f.offsetWidth;f.classList.remove('nt');requestAnimationFrame(()=>{f.style.setProperty('--fw',tw);f.style.setProperty('--fh',th)})}
 function jrPt(L){const C=HJ.CL;let lo=0,hi=C.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(C[m]<=L)lo=m;else hi=m}const d=C[hi]-C[lo]||1,t=Math.max(0,Math.min(1,(L-C[lo])/d));return{x:HJ.PX[lo]+(HJ.PX[hi]-HJ.PX[lo])*t,y:HJ.PY[lo]+(HJ.PY[hi]-HJ.PY[lo])*t}}
@@ -1994,6 +2008,9 @@ scenes[0].classList.add('active');$$('.dot')[0].classList.add('on');$('#up').sty
 
 /* 📍 [HIỆU NĂNG] Giải mã sẵn ảnh lúc rảnh (sau khi mở màn) để lúc khung ảnh hiện ra không bị khựng */
 setTimeout(()=>{const im=[...document.querySelectorAll('img[loading=lazy]')];let k=0;(function nx(){if(k>=im.length)return;const e=im[k++];e.loading='eager';(e.decode?e.decode():Promise.resolve()).catch(()=>{}).then(()=>setTimeout(()=>('requestIdleCallback' in window?requestIdleCallback(nx,{timeout:900}):nx()),250))})()},7000);
+
+/* 📍 [HIỆU NĂNG] Ảnh Hành trình tải sớm (chỉ 5 ảnh) để biết đúng tỷ lệ -> khung ôm ảnh ngay, không giật khi ảnh về muộn */
+setTimeout(()=>{JPH.forEach(f=>{const im=f.querySelector('img');if(im){im.loading='eager';im.fetchPriority='low'}})},2500);
 </script>
 </body>
 </html>
